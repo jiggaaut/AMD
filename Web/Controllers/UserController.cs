@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
+using SharedKernel.Models;
 using SharedKernel.Services;
+using Web.ViewModels;
 
 namespace Web.Controllers;
 
@@ -15,6 +17,11 @@ public class UserController : BaseController
     public string Index()
     {
         var user = _userService.GetUser(1);
+        var result = new Result<UserModel>
+        {
+            Entity = user,
+            IsSuccess = true
+        };
         var json = JsonSerializer.Serialize(user);
         return json;
     }

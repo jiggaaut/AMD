@@ -1,13 +1,33 @@
 ﻿using DB.Entities;
+using SharedKernel.Models;
+using SharedKernel.qwe;
 
 namespace SharedKernel.Services;
 
 public class SimpleUserService : IUserService
 {
-    public User GetUser(ulong id)
+    private readonly IUserFactory _userFactory;
+
+    /*
+    public SimpleUserService()
     {
-        var user = new User();
-        user.ID = id;
-        return user;
+        _userFactory = new UserFactory();
+    }
+    */
+
+    public SimpleUserService(IUserFactory userFactory)
+    {
+        _userFactory = userFactory;
+    }
+    
+    public UserModel GetUser(ulong id)
+    {
+        var user = new User
+        {
+            ID = id
+        };
+        var userModel = _userFactory.GetUserModel(user);
+
+        return userModel;
     }
 }

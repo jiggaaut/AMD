@@ -1,8 +1,8 @@
-﻿using DB.Entities;
+﻿using SharedKernel.Models;
 
 namespace SharedKernel.Services;
 
 public interface IUserService
 {
-    public User GetUser(ulong id);
+    public UserModel GetUser(ulong id);
 }
