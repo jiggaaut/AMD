@@ -11,7 +11,8 @@ builder.Services.AddControllers().AddJsonOptions(e =>
     e.JsonSerializerOptions.PropertyNamingPolicy = new LowerCaseNamingPolicy();
 });
 builder.Services.ConfigureFactories();
-builder.Services.ConfigureRepositories();
+builder.Services.ConfigureServices();
+builder.Services.ConfigureDatabase();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

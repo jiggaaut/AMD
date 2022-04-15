@@ -1,9 +1,9 @@
 ﻿using DB.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DB;
+namespace DB.Context;
 
-public sealed class EfDatabaseContext : DbContext
+public sealed class EfDatabaseContext : DbContext, IContext
 {
     public DbSet<User> Users { get; set; }
 
@@ -14,6 +14,6 @@ public sealed class EfDatabaseContext : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseMySql("server=localhost;user=root;password=root;database=amd;", new MySqlServerVersion(new Version(8, 0, 27)));
+        optionsBuilder.UseMySql(MainContext.ConnectionString, new MySqlServerVersion(new Version(8, 0, 27)));
     }
 }

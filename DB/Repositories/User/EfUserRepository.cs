@@ -1,4 +1,6 @@
-﻿namespace DB.Repositories.User;
+﻿using DB.Context;
+
+namespace DB.Repositories.User;
 using Entities;
 
 public class EfUserRepository : IUserRepository

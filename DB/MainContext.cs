@@ -1,12 +1,14 @@
-﻿using DB.Repositories.User;
+﻿using DB.Context;
+using DB.Repositories.User;
 
 namespace DB;
 
 public class MainContext : IMainContext
 {
-    private readonly EfDatabaseContext _context;
+    public const string ConnectionString = "server=localhost;user=root;password=root;database=amd;";
+    private readonly DapperDatabaseContext _context;
 
-    public MainContext(EfDatabaseContext context, IUserRepository userRepository)
+    public MainContext(DapperDatabaseContext context, IUserRepository userRepository)
     {
         _context = context;
         Users = userRepository;

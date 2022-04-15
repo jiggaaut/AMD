@@ -1,4 +1,5 @@
 ﻿using DB;
+using DB.Context;
 using DB.Entities;
 using DB.Repositories.User;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,32 @@ public static class ServiceBoot
         container.AddFactory<User, UserModel>();
     }
 
+    public static void ConfigureDatabase(this IServiceCollection container)
+    {
+        container.AddScoped<IMainContext, MainContext>();
+        container.ConfigureDapper();
+        //container.ConfigureEf();
+    }
+
+    public static void ConfigureServices(this IServiceCollection container)
+    {
+        container.AddScoped<IUserService, SimpleUserService>();
+    }
+
+    private static void ConfigureEf(this IServiceCollection container)
+    {
+        //container.AddScoped<IContext, EfDatabaseContext>();
+        container.AddDbContext<EfDatabaseContext>();
+        container.AddScoped<IUserRepository, EfUserRepository>();
+    }
+
+    private static void ConfigureDapper(this IServiceCollection container)
+    {
+        //container.AddScoped<IContext, DapperDatabaseContext>();
+        container.AddScoped<DapperDatabaseContext>();
+        container.AddScoped<IUserRepository, DapperUserRepository>();
+    }
+    
     private static void AddFactory<T1, T2>(this IServiceCollection container)
         where T1 : class
         where T2 : class, IFactory<T1>
@@ -27,18 +54,9 @@ public static class ServiceBoot
 
             return t0 =>
             {
-                f.Invoke(t0);
+                f!.Invoke(t0);
                 return f;
             };
         });
-    }
-
-    public static void ConfigureRepositories(this IServiceCollection container)
-    {
-        container.AddScoped<IUserService, SimpleUserService>();
-        container.AddScoped<IUserRepository, EfUserRepository>();
-        container.AddScoped<IMainContext, MainContext>();
-        //container.AddScoped<DapperDatabaseContext>();
-        container.AddDbContext<EfDatabaseContext>();
     }
 }
