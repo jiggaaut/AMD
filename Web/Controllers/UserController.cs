@@ -24,8 +24,9 @@ public class UserController : BaseController
             Entity = user,
             IsSuccess = true
         };
-        
+
         var json = JsonSerializer.Serialize(result);
         return json;
     }
+
 }

@@ -4,10 +4,12 @@ using Entities;
 public class EfUserRepository : IUserRepository
 {
     private readonly EfDatabaseContext _context;
-    public EfUserRepository()
+
+    public EfUserRepository(EfDatabaseContext context)
     {
-        _context = new EfDatabaseContext();
+        _context = context;
     }
+
     public User? GetItem(ulong id)
     {
         var user = _context.Users.Find(id);

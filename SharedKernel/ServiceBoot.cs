@@ -1,33 +1,47 @@
-﻿using Autofac;
+﻿using DB;
+using DB.Entities;
 using DB.Repositories.User;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using SharedKernel.qwe;
+using SharedKernel.Factories;
+using SharedKernel.Models;
 using SharedKernel.Services;
 
 namespace SharedKernel;
 
 public static class ServiceBoot
 {
-    public static ContainerBuilder ConfigureServices(this ContainerBuilder container)
+    public static IServiceCollection ConfigureFactories(this IServiceCollection container)
     {
-        // Register individual components
-        container.RegisterType<UserFactory>().As<IUserFactory>();
-        container.RegisterType<SimpleUserService>();
-        container.RegisterType<SimpleUserService>().As<IUserService>();
-        container.RegisterInstance(new EfUserRepository()).As<IUserRepository>();
-        //container.RegisterInstance(new SimpleUserService(new UserFactory())).As<IUserService>();
-        //builder.Register(c => new LogManager(DateTime.Now))
-        //    .As<ILogger>();
-
+        container.AddTransient<IKekModel, KekModel>();
+        container.AddFactory<User, UserModel>();
         return container;
     }
-    
-    public static IServiceCollection ConfigureServices(this IServiceCollection container)
+
+    public static IServiceCollection AddFactory<T1, T2>(this IServiceCollection container)
+        where T1 : class
+        where T2 : class, IFactory<T1>
     {
-        container.AddSingleton<IUserFactory, UserFactory>();
+        container.AddTransient<T2>();
+        container.AddSingleton<Func<T1, T2>>(serviceProvider =>
+        {
+            var f = serviceProvider.GetService<T2>();
+
+            return t0 =>
+            {
+                f.Invoke(t0);
+                return f;
+            };
+        });
+        return container;
+    }
+
+    public static IServiceCollection ConfigureRepositories(this IServiceCollection container)
+    {
         container.AddScoped<IUserService, SimpleUserService>();
         container.AddScoped<IUserRepository, EfUserRepository>();
+        container.AddScoped<IMainContext, MainContext>();
+        //container.AddScoped<DapperDatabaseContext>();
+        container.AddDbContext<EfDatabaseContext>();
         return container;
     }
 }

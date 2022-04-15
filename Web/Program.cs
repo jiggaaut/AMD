@@ -4,13 +4,15 @@ using SharedKernel;
 using Web.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(e =>
 {
     e.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     e.JsonSerializerOptions.PropertyNamingPolicy = new LowerCaseNamingPolicy();
 });
-builder.Services.ConfigureServices();
+builder.Services.ConfigureFactories();
+builder.Services.ConfigureRepositories();
 
 /*
 var containerBuilder = new ContainerBuilder();
