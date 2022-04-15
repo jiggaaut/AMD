@@ -1,4 +1,3 @@
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using SharedKernel;
 using Web.Utils;
@@ -13,13 +12,6 @@ builder.Services.AddControllers().AddJsonOptions(e =>
 });
 builder.Services.ConfigureFactories();
 builder.Services.ConfigureRepositories();
-
-/*
-var containerBuilder = new ContainerBuilder();
-containerBuilder.ConfigureServices();
-containerBuilder.ConfigureControllers();
-containerBuilder.Build();
-*/
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
