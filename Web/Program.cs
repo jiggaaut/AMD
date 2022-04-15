@@ -1,11 +1,15 @@
-using Autofac;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using SharedKernel;
-using Web;
+using Web.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(e =>
+{
+    e.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    e.JsonSerializerOptions.PropertyNamingPolicy = new LowerCaseNamingPolicy();
+});
 builder.Services.ConfigureServices();
 
 /*
