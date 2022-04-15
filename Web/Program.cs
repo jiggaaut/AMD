@@ -1,19 +1,10 @@
-using Autofac;
 using SharedKernel;
-using Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
-builder.Services.ConfigureServices();
-
-/*
-var containerBuilder = new ContainerBuilder();
-containerBuilder.ConfigureServices();
-containerBuilder.ConfigureControllers();
-containerBuilder.Build();
-*/
+builder.Services.ConfigureFactories();
+builder.Services.ConfigureRepositories();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
