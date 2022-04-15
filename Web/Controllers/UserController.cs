@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using SharedKernel.Models;
 using SharedKernel.Services;
 using Web.ViewModels;
@@ -14,6 +15,7 @@ public class UserController : BaseController
         _userService = userService;
     }
 
+    [HttpGet]
     public string Index()
     {
         var user = _userService.GetUser(1);
@@ -22,7 +24,8 @@ public class UserController : BaseController
             Entity = user,
             IsSuccess = true
         };
-        var json = JsonSerializer.Serialize(user);
+        
+        var json = JsonSerializer.Serialize(result);
         return json;
     }
 }

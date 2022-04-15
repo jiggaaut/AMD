@@ -15,8 +15,7 @@ public static class ServiceBoot
         container.RegisterType<UserFactory>().As<IUserFactory>();
         container.RegisterType<SimpleUserService>();
         container.RegisterType<SimpleUserService>().As<IUserService>();
-        container.RegisterInstance(new DapperUserRepository())
-            .As<IUserRepository>();
+        container.RegisterInstance(new EfUserRepository()).As<IUserRepository>();
         //container.RegisterInstance(new SimpleUserService(new UserFactory())).As<IUserService>();
         //builder.Register(c => new LogManager(DateTime.Now))
         //    .As<ILogger>();
@@ -28,7 +27,7 @@ public static class ServiceBoot
     {
         container.AddSingleton<IUserFactory, UserFactory>();
         container.AddScoped<IUserService, SimpleUserService>();
-        container.AddScoped<IUserRepository, DapperUserRepository>();
+        container.AddScoped<IUserRepository, EfUserRepository>();
         return container;
     }
 }
