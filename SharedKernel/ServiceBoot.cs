@@ -10,14 +10,13 @@ namespace SharedKernel;
 
 public static class ServiceBoot
 {
-    public static IServiceCollection ConfigureFactories(this IServiceCollection container)
+    public static void ConfigureFactories(this IServiceCollection container)
     {
         container.AddTransient<IKekModel, KekModel>();
         container.AddFactory<User, UserModel>();
-        return container;
     }
 
-    public static IServiceCollection AddFactory<T1, T2>(this IServiceCollection container)
+    private static void AddFactory<T1, T2>(this IServiceCollection container)
         where T1 : class
         where T2 : class, IFactory<T1>
     {
@@ -32,16 +31,14 @@ public static class ServiceBoot
                 return f;
             };
         });
-        return container;
     }
 
-    public static IServiceCollection ConfigureRepositories(this IServiceCollection container)
+    public static void ConfigureRepositories(this IServiceCollection container)
     {
         container.AddScoped<IUserService, SimpleUserService>();
         container.AddScoped<IUserRepository, EfUserRepository>();
         container.AddScoped<IMainContext, MainContext>();
         //container.AddScoped<DapperDatabaseContext>();
         container.AddDbContext<EfDatabaseContext>();
-        return container;
     }
 }
