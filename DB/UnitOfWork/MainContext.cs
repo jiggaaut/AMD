@@ -1,20 +1,24 @@
 ﻿using DB.Context;
+using DB.Repositories.Auth;
 using DB.Repositories.User;
 
-namespace DB;
+namespace DB.UnitOfWork;
 
+//[Obsolete]
 public class MainContext : IMainContext
 {
     public const string ConnectionString = "server=localhost;user=root;password=root;database=amd;";
-    private readonly DapperDatabaseContext _context;
+    private readonly EfDatabaseContext _context;
 
-    public MainContext(DapperDatabaseContext context, IUserRepository userRepository)
+    public MainContext(EfDatabaseContext context)//, IUserRepository userRepository, IAuthRepository authRepository
     {
         _context = context;
-        Users = userRepository;
+        //Users = userRepository;
+        //Auths = authRepository;
     }
 
     public IUserRepository Users { get; }
+    public IAuthRepository Auths { get; }
 
     public void Dispose()
     {

@@ -1,5 +1,6 @@
 ﻿using DB;
 using DB.Entities;
+using DB.UnitOfWork;
 using SharedKernel.Models;
 
 namespace SharedKernel.Services;
@@ -21,6 +22,7 @@ public class SimpleUserService : IUserService
         var user = _mainContext.Users.GetItem(id);
         if (user == null) return null;
 
+        var auth = _mainContext.Auths.GetItem(1);
         var qq = _userFactory.Invoke(user);
         return qq;
     }

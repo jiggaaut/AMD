@@ -1,7 +1,6 @@
 ﻿namespace DB.Repositories.User;
-using Entities;
 
-public interface IUserRepository
+public interface IUserRepository : IRepository<Entities.User>
 {
-    public User? GetItem(ulong id);
+    
 }

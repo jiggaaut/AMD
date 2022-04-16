@@ -2,6 +2,7 @@
 using MySqlConnector;
 using Dapper;
 using DB.Entities;
+using DB.UnitOfWork;
 
 namespace DB.Context;
 

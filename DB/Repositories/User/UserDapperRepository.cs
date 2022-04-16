@@ -2,23 +2,22 @@
 using DB.Context;
 
 namespace DB.Repositories.User;
-using Entities;
 
-public class DapperUserRepository : IUserRepository
+public class UserDapperRepository : IUserRepository
 {
     private readonly DapperDatabaseContext _context;
 
-    public DapperUserRepository(DapperDatabaseContext context)
+    public UserDapperRepository(DapperDatabaseContext context)
     {
         _context = context;
     }
     
-    public User? GetItem(ulong id)
+    public Entities.User? GetItem(ulong id)
     {
         const string cmdTxt = "SELECT * FROM USERS WHERE ID=@ID";
         var parameters = new DynamicParameters();
         parameters.Add("@ID", id);
-        var user = _context.Get<User>(cmdTxt, parameters);
+        var user = _context.Get<Entities.User>(cmdTxt, parameters);
         return user;
     }
 }
