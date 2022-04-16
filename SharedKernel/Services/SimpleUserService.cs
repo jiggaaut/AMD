@@ -1,5 +1,6 @@
 ﻿using DB;
 using DB.Entities;
+using DB.Repositories.User;
 using DB.UnitOfWork;
 using SharedKernel.Models;
 

@@ -8,21 +8,42 @@ namespace DB.UnitOfWork;
 public class MainContext : IMainContext
 {
     public const string ConnectionString = "server=localhost;user=root;password=root;database=amd;";
-    private readonly EfDatabaseContext _context;
+    private readonly DbFactory _dbFactory;
+    private readonly Func<IUserRepository> _func;
 
-    public MainContext(EfDatabaseContext context)//, IUserRepository userRepository, IAuthRepository authRepository
+    public MainContext(DbFactory dbFactory, IUserRepository userRepository, IAuthRepository authRepository, Func<IUserRepository> func)
     {
-        _context = context;
+        _dbFactory = dbFactory;
         //Users = userRepository;
-        //Auths = authRepository;
+        Auths = authRepository;
+        _func = func;
     }
 
-    public IUserRepository Users { get; }
+    //public IUserRepository Users { get; }
+
     public IAuthRepository Auths { get; }
 
+    private IUserRepository? _us;
+
+    public IUserRepository Users
+    {
+        get
+        {
+            return _us ??= _func.Invoke();
+        }
+    }
+
+    public IUserRepository Us
+    {
+        get
+        {
+            return _us ??= new UserEfRepository(_dbFactory.DbContext);
+        }
+    }
+    
     public void Dispose()
     {
-        _context.Dispose();
+        _dbFactory.Dispose();
         GC.SuppressFinalize(this);
     }
 }

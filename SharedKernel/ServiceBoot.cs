@@ -1,5 +1,8 @@
-﻿using DB.Context;
+﻿using System.Runtime.InteropServices.ComTypes;
+using DB;
+using DB.Context;
 using DB.Entities;
+using DB.Repositories;
 using DB.Repositories.Auth;
 using DB.Repositories.User;
 using DB.UnitOfWork;
@@ -26,12 +29,22 @@ public static class ServiceBoot
     public static void ConfigureDatabase(this IServiceCollection container)
     {
         //container.ConfigureDapper();
-        container.ConfigureEf();
+        //container.ConfigureEf();
 
-        //container.AddScoped<IMainContext, MainContext>();
-        //container.AddScoped<EfDatabaseContext>();
-        //container.AddScoped<IUserRepository, UserEfRepository>();
-        //container.AddScoped<IAuthRepository, AuthEfRepository>();
+        container.AddScoped<IMainContext, MainContext>();
+        container.AddDbContext<EfDatabaseContext>();
+        container.AddScoped<Func<EfDatabaseContext>>(provider => provider.GetService<EfDatabaseContext>);
+        container.AddScoped<DbFactory>();
+        container.AddRepository<IUserRepository, UserEfRepository>();
+        container.AddRepository<IAuthRepository, AuthEfRepository>();
+    }
+
+    private static void AddRepository<T1, T2>(this IServiceCollection container)
+        where T1 : class
+        where T2 : class, T1
+    {
+        container.AddScoped<Func<T1>>(e => e.GetService<T1>);
+        container.AddScoped<T1, T2>();
     }
 
     private static void ConfigureEf(this IServiceCollection container)
