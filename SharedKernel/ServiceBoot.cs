@@ -29,7 +29,8 @@ public static class ServiceBoot
     public static void ConfigureDatabase(this IServiceCollection container)
     {
         container.AddScoped<IMainContext, MainContext>();
-        container.AddScoped<DbFactory>();
+        //container.AddScoped<DbFactory>();
+        
         //container.ConfigureDapper();
         container.ConfigureEf();
     }
@@ -45,7 +46,7 @@ public static class ServiceBoot
     private static void ConfigureEf(this IServiceCollection container)
     {
         container.AddDbContext<EfDatabaseContext>();
-        container.AddScoped<Func<EfDatabaseContext>>(provider => provider.GetRequiredService<EfDatabaseContext>);
+        //container.AddScoped<Func<EfDatabaseContext>>(provider => provider.GetRequiredService<EfDatabaseContext>);
         container.AddScoped<IUserRepository, UserEfRepository>();
         container.AddScoped<IAuthRepository, AuthEfRepository>();
     }
@@ -53,7 +54,7 @@ public static class ServiceBoot
     private static void ConfigureDapper(this IServiceCollection container)
     {
         container.AddScoped<DapperDatabaseContext>();
-        container.AddScoped<Func<DapperDatabaseContext>>(provider => provider.GetRequiredService<DapperDatabaseContext>);
+        //container.AddScoped<Func<DapperDatabaseContext>>(provider => provider.GetRequiredService<DapperDatabaseContext>);
         container.AddScoped<IUserRepository, UserDapperRepository>();
         container.AddScoped<IAuthRepository, AuthDapperRepository>();
     }

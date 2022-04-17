@@ -1,5 +1,6 @@
 ﻿using DB.Context;
-namespace DB;
+
+namespace DB.UnitOfWork;
 
 public class DbFactory : IDisposable
 {

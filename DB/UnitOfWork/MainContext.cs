@@ -4,17 +4,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DB.UnitOfWork;
 
-//[Obsolete]
 public class MainContext : IMainContext
 {
-    public const string ConnectionString = "server=localhost;user=root;password=root;database=amd;";
+    public const string ConnectionString = "server=192.168.88.254;user=root;password=root;database=amd;";
 
-    private readonly DbFactory _dbFactory;
+    //private readonly DbFactory _dbFactory;
     private readonly IServiceProvider _container;
 
-    public MainContext(DbFactory dbFactory, IServiceProvider container)
+    public MainContext(IServiceProvider container)//DbFactory dbFactory, 
     {
-        _dbFactory = dbFactory;
+        //_dbFactory = dbFactory;
         _container = container;
     }
 
@@ -36,10 +35,14 @@ public class MainContext : IMainContext
         }
     }
 
-    
+    public void SaveChanges()
+    {
+        //_dbFactory.DbContext.SaveChanges();
+    }
+
     public void Dispose()
     {
-        _dbFactory.Dispose();
+        //_dbFactory.Dispose();
         GC.SuppressFinalize(this);
     }
 }
