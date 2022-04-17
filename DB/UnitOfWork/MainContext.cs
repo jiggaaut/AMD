@@ -1,6 +1,6 @@
-﻿using DB.Context;
-using DB.Repositories.Auth;
+﻿using DB.Repositories.Auth;
 using DB.Repositories.User;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DB.UnitOfWork;
 
@@ -8,38 +8,34 @@ namespace DB.UnitOfWork;
 public class MainContext : IMainContext
 {
     public const string ConnectionString = "server=localhost;user=root;password=root;database=amd;";
-    private readonly DbFactory _dbFactory;
-    private readonly Func<IUserRepository> _func;
 
-    public MainContext(DbFactory dbFactory, IUserRepository userRepository, IAuthRepository authRepository, Func<IUserRepository> func)
+    private readonly DbFactory _dbFactory;
+    private readonly IServiceProvider _container;
+
+    public MainContext(DbFactory dbFactory, IServiceProvider container)
     {
         _dbFactory = dbFactory;
-        //Users = userRepository;
-        Auths = authRepository;
-        _func = func;
+        _container = container;
     }
 
-    //public IUserRepository Users { get; }
+    private IAuthRepository? _auths;
+    public IAuthRepository Auths
+    {
+        get
+        {
+            return _auths ??= _container.GetRequiredService<IAuthRepository>();
+        }
+    }
 
-    public IAuthRepository Auths { get; }
-
-    private IUserRepository? _us;
-
+    private IUserRepository? _users;
     public IUserRepository Users
     {
         get
         {
-            return _us ??= _func.Invoke();
+            return _users ??= _container.GetRequiredService<IUserRepository>();
         }
     }
 
-    public IUserRepository Us
-    {
-        get
-        {
-            return _us ??= new UserEfRepository(_dbFactory.DbContext);
-        }
-    }
     
     public void Dispose()
     {

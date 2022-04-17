@@ -28,38 +28,32 @@ public static class ServiceBoot
 
     public static void ConfigureDatabase(this IServiceCollection container)
     {
-        //container.ConfigureDapper();
-        //container.ConfigureEf();
-
         container.AddScoped<IMainContext, MainContext>();
-        container.AddDbContext<EfDatabaseContext>();
-        container.AddScoped<Func<EfDatabaseContext>>(provider => provider.GetService<EfDatabaseContext>);
         container.AddScoped<DbFactory>();
-        container.AddRepository<IUserRepository, UserEfRepository>();
-        container.AddRepository<IAuthRepository, AuthEfRepository>();
+        //container.ConfigureDapper();
+        container.ConfigureEf();
     }
 
     private static void AddRepository<T1, T2>(this IServiceCollection container)
         where T1 : class
         where T2 : class, T1
     {
-        container.AddScoped<Func<T1>>(e => e.GetService<T1>);
+        container.AddScoped<Func<T1>>(e => e.GetRequiredService<T1>);
         container.AddScoped<T1, T2>();
     }
 
     private static void ConfigureEf(this IServiceCollection container)
     {
-        container.AddScoped<IMainContext, MainEfContext>();
-        //container.AddScoped<EfDatabaseContext>();
         container.AddDbContext<EfDatabaseContext>();
+        container.AddScoped<Func<EfDatabaseContext>>(provider => provider.GetRequiredService<EfDatabaseContext>);
         container.AddScoped<IUserRepository, UserEfRepository>();
         container.AddScoped<IAuthRepository, AuthEfRepository>();
     }
 
     private static void ConfigureDapper(this IServiceCollection container)
     {
-        container.AddScoped<IMainContext, MainDapperContext>();
         container.AddScoped<DapperDatabaseContext>();
+        container.AddScoped<Func<DapperDatabaseContext>>(provider => provider.GetRequiredService<DapperDatabaseContext>);
         container.AddScoped<IUserRepository, UserDapperRepository>();
         container.AddScoped<IAuthRepository, AuthDapperRepository>();
     }
@@ -71,11 +65,11 @@ public static class ServiceBoot
         container.AddTransient<T2>();
         container.AddSingleton<Func<T1, T2>>(serviceProvider =>
         {
-            var f = serviceProvider.GetService<T2>();
+            var f = serviceProvider.GetRequiredService<T2>();
 
             return t0 =>
             {
-                f!.Invoke(t0);
+                f.Invoke(t0);
                 return f;
             };
         });
