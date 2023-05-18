@@ -22,7 +22,7 @@ public class SimpleUserService : IUserService
         if (user == null) return null;
 
         var auth = _mainContext.Auths.GetItem(1);
-        var qq = _userFactory.Invoke(user);
-        return qq;
+        var userModel = _userFactory.Invoke(user);
+        return userModel;
     }
 }

@@ -70,7 +70,7 @@ public static class ServiceBoot
 
             return t0 =>
             {
-                f.Invoke(t0);
+                f.Initialize(t0);
                 return f;
             };
         });

@@ -7,5 +7,5 @@ public interface IFactory
 
 public interface IFactory<in T1>
 {
-    void Invoke(T1 t1);
+    void Initialize(T1 t1);
 }

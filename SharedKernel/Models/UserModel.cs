@@ -16,7 +16,7 @@ public class UserModel : BaseModel, IFactory<User>
         _kekModel = kekModel;
     }
 
-    public void Invoke(User user)
+    public void Initialize(User user)
     {
         ID = user.ID;
         Login = user.Login;
